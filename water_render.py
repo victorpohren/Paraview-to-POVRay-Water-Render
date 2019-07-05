@@ -1,3 +1,4 @@
+path = input ("Input the path of your snapshots.xdmf file as a string:")#exemple '/home/laset/filipi/data_channel/snapshots.xdmf'
 tstp = input("How many timesteps to render? (type a number from 0 to 400) ") 
 print('rendering '+str(tstp)+' timesteps') 
 
@@ -8,7 +9,7 @@ from paraview.simple import *
 paraview.simple._DisableFirstRenderCameraReset()
 
 # create a new 'XDMF Reader'
-snapshotsxdmf = XDMFReader(FileNames=['/home/laset/filipi/data_channel/snapshots.xdmf']) #SNAPSHOTS PATH
+snapshotsxdmf = XDMFReader(FileNames=[path]) #SNAPSHOTS PATH
 snapshotsxdmf.PointArrayStatus = ['phi1', 'pre', 'q-criterion', 'ux', 'uy', 'uz']
 
 # get animation scene
