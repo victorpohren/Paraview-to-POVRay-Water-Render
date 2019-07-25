@@ -1,6 +1,9 @@
-path = input ("Input the path of your snapshots.xdmf file as a string:")#exemple '/home/laset/filipi/data_channel/snapshots.xdmf'
-tstp = input("How many timesteps to render? (type a number from 0 to 400) ") 
+path = input ("Input the path of your snapshots.xdmf file as a string:\n")#exemple '/home/laset/filipi/data_channel/snapshots.xdmf'
+tstp = input("\nHow many timesteps to render?\n") 
 print('rendering '+str(tstp)+' timesteps') 
+
+############ IMPORT STL FILES FROM PARAVIEW-----------------------------------------------------------------------
+
 
 
 #### import the simple module from the paraview
@@ -115,8 +118,7 @@ contour1Display.PolarAxes = 'PolarAxesRepresentation'
 renderView1.Update()
 
 # save data
-SaveData('/home/laset/stl2pov/a.stl', proxy=contour1, FileType='Binary',
-    WriteAllTimeSteps=1) #PATH TO SAVE STL FILES, MUST BE THE SAME FROM STL2POV
+SaveData('/home/laset/stl2pov/a.stl', proxy=contour1, FileType='Binary', WriteAllTimeSteps=1) #PATH TO SAVE STL FILES, MUST BE THE SAME FROM STL2POV
 
 #### saving camera placements for all active views
 
@@ -128,14 +130,101 @@ renderView1.CameraParallelScale = 10.09847885833585
 #### uncomment the following to render all views
 # RenderAllViews()
 # alternatively, if you want to write images, you can use SaveScreenshot(...).
+####################---------------------------------------------------------------------------------------
 
-#gerar arquivos pov e renderizar imagens e vide partindo dos objetos STL ----------------------
 
 import os
 import sys
 import fileinput
 
-# converte arquivos stl------------------------------------------------------------------------------------
+
+################test mesh scale in the final scene --------------------------------------------------------
+
+# generate inc and pov file for the final step
+stl1 = './stl2pov -s a.' + str(tstp) + '.stl > a' + str("%03d" % tstp) + '.inc'
+os.system(stl1)
+
+for line in fileinput.input('a'+ str("%03d" % tstp) +'.inc', inplace=True):
+    		if line.strip().startswith('#declare'):
+        		line = '#declare a'+ str("%03d" % tstp) +' = mesh {\n'
+    		sys.stdout.write(line)
+
+
+# Read in the file
+with open('a%%%.pov', 'r') as file :
+  	filedata = file.read()
+
+# Replace the target string
+filedata = filedata.replace('a%%%', 'a'+ str("%03d" % tstp))
+
+# Write the file out again
+with open('a'+ str("%03d" % tstp)+ '.pov', 'w') as file:
+  	file.write(filedata)
+
+# render the last scene
+teste = 'povray a' + str("%03d" % tstp) +'.pov -w4000 -h2000'
+os.system(teste)
+teste1 = 'eog a' + str("%03d" % tstp) +'.png'
+os.system(teste1)
+
+# scale options
+query = input('\nDo you want to scale your object in the scene? < use \'y\' or \'n\'>\n')
+Fl = query[0].lower()
+         
+while True:
+	if Fl == 'n':
+		F = 'var'        	
+		print('\nNo changes in the scale.\n')
+		break 
+
+	if Fl == 'y':
+        	cscale = input('\nInput the value for scale: <type a number>\n')
+		with open('a%%%.pov', 'r') as file :
+  			filedata = file.read()
+
+# Replace the target string
+		filedata = filedata.replace('//scale', 'scale '+str(cscale))
+
+# Write the file out again
+		with open('a%%%.pov', 'w') as file:
+  				file.write(filedata)
+# Read in the file
+		with open('a%%%.pov', 'r') as file :
+	  		filedata = file.read()
+	
+# Replace the target string
+		filedata = filedata.replace('a%%%', 'a'+ str("%03d" % tstp))
+
+# Write the file out again
+		with open('a'+ str("%03d" % tstp)+ '.pov', 'w') as file:
+	  		file.write(filedata)
+
+		os.system(teste)
+		os.system(teste1)
+	   
+		query = input('\nIs this result ok? < use \'y\' or \'n\'>\n')
+        	F = query[0].lower()
+
+	if F == 'n':
+		print ('redo')	
+	
+	if F == 'y':
+		with open('a%%%.pov', 'r') as file :
+			filedata = file.read()
+
+# Replace the target string
+		filedata = filedata.replace('//scale', 'scale '+str(cscale))
+
+# Write the file out again
+		with open('a%%%.pov', 'w') as file:
+			file.write(filedata)
+		print('\nChanges made.\n')
+		break
+#####################################################--------------------------------------------------------
+
+
+	
+# convert all stl files to inc-------------------------------------------------------------------------------
 
 for s in range(1, tstp+1): #SELECT RANGE OF TIMESTEPS
 	stl = './stl2pov -s a.' + str(s) + '.stl > a' + str("%03d" % s) + '.inc'
@@ -144,20 +233,17 @@ for s in range(1, tstp+1): #SELECT RANGE OF TIMESTEPS
 
 
 
-# altera nome da mesh no arquivo .inc para correspondente--------------------------------------------------
+# change mesh name in the inc file to the correspondent timestep---------------------------------------------
 
-for m in range(1, tstp+1): #SELECT RANGE OF TIMESTEPS
+for m in range(1, tstp+1): 
 	for line in fileinput.input('a'+ str("%03d" % m) +'.inc', inplace=True):
     		if line.strip().startswith('#declare'):
         		line = '#declare a'+ str("%03d" % m) +' = mesh {\n'
     		sys.stdout.write(line)
 
+# change mesh name in the pov file to the correspondent timestep---------------------------------------------
 
-
-
-# altera nome da mesh no arquivo .pov para correspondente--------------------------------------------------
-
-for x in range(1, tstp+1): #SELECT RANGE OF TIMESTEPS
+for x in range(1, tstp+1):
 # Read in the file
 	with open('a%%%.pov', 'r') as file :
   		filedata = file.read()
@@ -170,20 +256,41 @@ for x in range(1, tstp+1): #SELECT RANGE OF TIMESTEPS
   		file.write(filedata)
 
 
+# render pov files --------------------------------------------------------------------------------------
 
-
-# renderiza arquivos pov via povray-----------------------------------------------------------------------
-
-for p in range(1, tstp+1): #SELECT RANGE OF TIMESTEPS
+for p in range(1, tstp+1): 
 	pov = 'povray a' + str("%03d" % p) +'.pov -w4000 -h2000'
 	os.system(pov)
 
 
+################ return default pov file to scale 1
+while True:
+	if F == 'y':
+		with open('a%%%.pov', 'r') as file :
+  			filedata = file.read()
+
+# Replace the target string
+		filedata = filedata.replace('scale '+str(cscale), '//scale')
+
+# Write the file out again
+		with open('a%%%.pov', 'w') as file:
+  			file.write(filedata)	
+		break	
+	else:
+		break
 
 
-# produz video--------------------------------------------------------------------------------------------
+#copy last image to fix error of video not showing all frames --------------------------------------------
+import shutil 
+for c in range(tstp+1, tstp+11):
+	src = 'a'+str("%03d" % tstp) + '.png'
+	dst = 'a'+str("%03d" % c) + '.png'
+	shutil.copy(src, dst)
 
-video = 'ffmpeg -framerate 14 -i a%03d.png -vf format=yuv420p video.mp4'
+
+# produce video--------------------------------------------------------------------------------------------
+
+video = 'ffmpeg -framerate 15 -i a%03d.png -vf format=yuv420p video.mp4'
 os.system(video)
 
-print('\nRenderizado com sucesso.\n') 
+print('\nRaytracing render process complete.\n') 
