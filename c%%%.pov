@@ -1,6 +1,4 @@
-#include "./a1.pov"   
-#include "./a5.pov"
-#include "./a9.pov"
+#include "./a1.pov"   // match %%% for the correspondent mesh a%03d
 
 #include "math.inc"
 #include "finish.inc"
@@ -47,10 +45,10 @@ global_settings{
 
 // camera // location on the x axis 
 #declare Cam0 = camera {/*ultra_wide_angle*/ angle 45 
-                        location  <19.3 , 5.0 ,-12> 
-                        look_at   <18.9 , 1.5 , -4.5>
-                        rotate  <-5, -50, 0>
-                        translate < 8, 2, -15>
+                        location  <23.5 , 3 ,1> 
+                        look_at   <0, -5.0 , 1>
+                        //rotate  <-5, -50, 0>
+                        //translate < 8, 2, -15>
                         }
 camera{Cam0}
 
@@ -75,7 +73,6 @@ light_source {
   <1500,2500,-2500> color White
   #if (AreaLight=on)
     area_light 400*x 400*y  4,4
-    adaptative 1
     jitter
     circular
     orient
@@ -140,59 +137,7 @@ object {
 //scale
  // match % for the correspondent a%03d.inc 
   texture{ pigment { Col_Glass_Old } 
-                finish { ambient 0.0 diffuse 0.55 
-                         brilliance 3.0 specular 0.8 roughness 0.0025
-                         reflection 0.0 }
-              }
-      interior{ ior 1.33 }
-}
-
-
-
-
-
-#declare Min = min_extent(a5);   // match %%% for the correspondent a%03d.inc 
-#declare Max = max_extent(a5);   // match %%% for the correspondent a%03d.inc 
-#declare bottom_diag = sqrt(pow(Max.y - Min.y, 2) + pow(Max.x - Min.x, 2));
-#debug concat("bottom_diag:", str(bottom_diag, 5, 0))
-#declare box_diag = sqrt(pow(bottom_diag, 2) + pow(Max.z - Min.z, 2));
-#debug concat("box_diag:", str(box_diag, 5, 0))
-#declare look_angle = degrees(tanh((Max.z - Min.z) / (bottom_diag / 2)));
-#declare look_at_z = (Max.z - Min.z) / 2;
-#debug concat("look_at:", str(look_at_z, 5, 0))
-
-object {
-  a5
-//scale
- // match % for the correspondent a%03d.inc 
-  texture{ pigment { Col_Glass_Old } 
-                finish { ambient 0.0 diffuse 0.55 
-                         brilliance 3.0 specular 0.8 roughness 0.0025
-                         reflection 0.0 }
-              }
-      interior{ ior 1.33 }
-}
-
-
-
-
-
-#declare Min = min_extent(a9);   // match %%% for the correspondent a%03d.inc 
-#declare Max = max_extent(a9);   // match %%% for the correspondent a%03d.inc 
-#declare bottom_diag = sqrt(pow(Max.y - Min.y, 2) + pow(Max.x - Min.x, 2));
-#debug concat("bottom_diag:", str(bottom_diag, 5, 0))
-#declare box_diag = sqrt(pow(bottom_diag, 2) + pow(Max.z - Min.z, 2));
-#debug concat("box_diag:", str(box_diag, 5, 0))
-#declare look_angle = degrees(tanh((Max.z - Min.z) / (bottom_diag / 2)));
-#declare look_at_z = (Max.z - Min.z) / 2;
-#debug concat("look_at:", str(look_at_z, 5, 0))
-
-object {
-  a9
-//scale
- // match % for the correspondent a%03d.inc 
-  texture{ pigment { Col_Glass_Old } 
-                finish { ambient 0.0 diffuse 0.55 
+                finish { ambient 0.05 diffuse 0.55 
                          brilliance 3.0 specular 0.8 roughness 0.0025
                          reflection 0.0 }
               }
@@ -204,16 +149,16 @@ object {
 //----------------------------------------- flow box --------------------------------------------------
 
 //--left box
-box{ <-100/2,0,-80/2>,<0,1.5/2,9.05/2> 
+box{ <-200/2,0,-80/2>,<0,1.5/2,0.05/2> 
 //scale
     texture { New_Brass 	scale 1}
    }
 
 //--water flow box
-box{ <-100/2,0,9.05/2>,<0,1.35/2,10.95/2>
+box{ <-200/2,0,0.05/2>,<0,1.0/2,4/2>
 //scale
     texture{ pigment { Col_Glass_Old } 
-                finish { ambient 0.0 diffuse 0.55 
+                finish { ambient 0.05 diffuse 0.55 
                          brilliance 3.0 specular 0.8 roughness 0.0025
                          reflection 0.0 }
               }
@@ -221,7 +166,7 @@ box{ <-100/2,0,9.05/2>,<0,1.35/2,10.95/2>
 }
   
 //--right box
-box{ <-100/2,0,10.95/2>,<0,1.5/2,100/2> 
+box{ <-200/2,0,4/2>,<0,1.5/2,100/2> 
 //scale
     texture { 	New_Brass 	scale 1 }
    }
