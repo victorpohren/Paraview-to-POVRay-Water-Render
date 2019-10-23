@@ -6,15 +6,34 @@ import fileinput
 from decimal import getcontext, Decimal
 getcontext().prec = 5
 
-path = input ("Input the path of your snapshots.xdmf file as a string:\n")#exemple '/home/laset/filipi/data_channel/snapshots.xdmf'
+from decimal import getcontext, Decimal
+getcontext().prec = 5
+
+simpath = raw_input ("Input the path of your snapshots.xdmf file:\n") 
+vispath = raw_input ("\nType a paste name to save the visualization files:\n")
+
+visdir = 'mkdir '+ str(vispath)
+os.system(visdir)
+
+cpattern = 'cp a%%%.pov '+str(vispath)
+os.system(cpattern)
+
+os.chdir(vispath)
+
+cwd = os.getcwd()
+print cwd
+
 frames = input("\nType the total number of frames in your simulation:\n")
-t = input("\nType the total time of your simulation:\n")
+t = input("\nType the total time of your simulation: [seconds]\n")
 tstp = Decimal(t)/Decimal(frames)
-print (tstp)
+print ('timestep: '+str(tstp)+'s')
 ff = input("\nType the frame number you want to start from:\n")
 lf = input("\nType until wich you want to render:\n")
-isovalores = input("\nType 3 for 3 isovalours (anything else will use 1 isovalour):\n")
+ni = input("\nType how many isovalours you want to use:\n")
+fi = input("\nType the first isovalour:\n")
+li = input("\nType the last isovalour:\n")
 print('\nRendering from frame '+str(ff)+' to ' + str(lf)+'\n\n\n\n\n\n') 
+
 
 #### import the simple module from the paraview
 from paraview.simple import *
@@ -22,7 +41,7 @@ from paraview.simple import *
 paraview.simple._DisableFirstRenderCameraReset()
 
 # create a new 'XDMF Reader'
-a1_snapshotsxdmf = XDMFReader(FileNames=[path])
+a1_snapshotsxdmf = XDMFReader(FileNames=[str(simpath)])
 a1_snapshotsxdmf.PointArrayStatus = ['phi1']
 
 # get animation scene
@@ -103,7 +122,7 @@ for f in range (ff,lf+1):
 	contour1.PointMergeMethod = 'Uniform Binning'
 
 	# Properties modified on contour1
-	contour1.Isosurfaces = [0.1]
+	contour1.Isosurfaces = [g for g in numpy.linspace(fi, li, ni)]
 
 	# show data in view
 	contour1Display = Show(contour1, renderView1)
@@ -124,7 +143,7 @@ for f in range (ff,lf+1):
 	renderView1.Update()
 
 	# export view
-	ExportView('/home/laset/ray_tracer/a1_'+ str("%03d" % f) + '.pov', view=renderView1)
+	ExportView(str(cwd) +'/a_'+ str("%03d" % f) + '.pov', view=renderView1)
 
 	# set active source
 	SetActiveSource(forceTime1)
@@ -165,10 +184,9 @@ for f in range (ff,lf+1):
 	# RenderAllViews()
 	# alternatively, if you want to write images, you can use SaveScreenshot(...).
 
-x = Decimal(ff)*Decimal(tstp)
 
 
-#####import last frame for the mesh scale test
+#####import last frame for the mesh scale test-----------------------------------------------------------------
 
 x = Decimal(t)
 
@@ -208,7 +226,7 @@ contour1.Isosurfaces = [0.4599035307765007]
 contour1.PointMergeMethod = 'Uniform Binning'
 
 # Properties modified on contour1
-contour1.Isosurfaces = [0.1]
+contour1.Isosurfaces = [g for g in numpy.linspace(fi, li, ni)]
 
 # show data in view
 contour1Display = Show(contour1, renderView1)
@@ -229,7 +247,7 @@ contour1Display.PolarAxes = 'PolarAxesRepresentation'
 renderView1.Update()
 
 # export view
-ExportView('/home/laset/ray_tracer/a1_'+ str("%03d" % frames) + '.pov', view=renderView1)
+ExportView(str(cwd)+'/s_'+ str("%03d" % lf) + '.pov', view=renderView1)
 
 # set active source
 SetActiveSource(forceTime1)
@@ -257,8 +275,6 @@ a1_snapshotsxdmfDisplay = Show(a1_snapshotsxdmf, renderView1)
 Delete(forceTime1)
 del forceTime1
 
-
-
 #### saving camera placements for all active views
 
 # current camera placement for renderView1
@@ -271,10 +287,14 @@ renderView1.CameraParallelScale = 6.422616289332565
 # alternatively, if you want to write images, you can use SaveScreenshot(...).
 
 
+cdir = 'cd '+str(vispath)
+os.system(cdir)
+
+cwd = os.getcwd()
+print cwd
 ################test mesh scale in the final scene --------------------------------------------------------
 
-
-fin = open( 'a1_'+ str("%03d" % frames) + '.pov', "r" )
+fin = open( 'a_'+ str("%03d" % lf) + '.pov', "r" )
 data_list = fin.readlines()
 fin.close()
 
@@ -282,24 +302,24 @@ fin.close()
 del data_list[0:55]
 
 # write the changed data (list) to a file
-fout = open( 'a1_'+ str("%03d" % frames) + '.pov', "w")
+fout = open( 's_'+ str("%03d" % lf) + '.pov', "w")
 fout.writelines(data_list)
 fout.close() 
 
-for line in fileinput.input('a1_'+ str("%03d" % frames) + '.pov', inplace=True):
+for line in fileinput.input('s_'+ str("%03d" % lf) + '.pov', inplace=True):
 	    if line.strip().startswith('mesh2'):
-		line = '#declare a1_'+ str("%03d" % frames)+' = mesh2 {\n'
+	        line = '#declare s_'+ str("%03d" % lf)+' = mesh2 {\n'
 	    sys.stdout.write(line)
-		
+	
 counter = 0
-for line in fileinput.input('a1_'+ str("%03d" % frames) + '.pov', inplace=True):
+for line in fileinput.input('s_'+ str("%03d" % lf) + '.pov', inplace=True):
     if not counter:
-	if line.startswith('	texture'):
-		    counter = 7
-	else:
-	    print line,
+        if line.startswith('	texture'):
+            counter = 7
+        else:
+            print line,
     else:
-	counter -= 1
+        counter -= 1
 
 
 
@@ -309,25 +329,24 @@ for line in fileinput.input('a1_'+ str("%03d" % frames) + '.pov', inplace=True):
 
 
 # Read in the file
-with open('c%%%.pov', 'r') as file :
+with open('a%%%.pov', 'r') as file :
   	filedata = file.read()
 
 # Replace the target string
-filedata = filedata.replace('a1', 'a1_'+ str("%03d" % frames))
-
-
+filedata = filedata.replace('char_', 's_'+ str("%03d" % lf))
+	
 # Write the file out again
-with open('testscale'+ str("%03d" % frames)+ '.pov', 'w') as file:
+with open('s'+ str("%03d" % lf)+ '.pov', 'w') as file:
   	file.write(filedata)
 
 # render the last scene
-teste = 'povray testscale' + str("%03d" % frames) +'.pov -w4000 -h2000'
+teste = 'povray s' + str("%03d" % lf) +'.pov -w4000 -h2000'
 os.system(teste)
-teste1 = 'eog testscale' + str("%03d" % frames) +'.png'
+teste1 = 'eog s' + str("%03d" % lf) +'.png'
 os.system(teste1)
 
 # scale options
-query = input('\nDo you want to scale your object in the scene? < use \'y\' or \'n\'>\n')
+query = raw_input('\nDo you want to scale your object in the scene? < use y or n>\n')
 Fl = query[0].lower()
          
 while True:
@@ -339,112 +358,76 @@ while True:
 	if Fl == 'y':
         	cscale = input('\nInput the value for scale: <type a number>\n')
 		# Read in the file
-		with open('c%%%.pov', 'r') as file :
+		with open('a%%%.pov', 'r') as file :
   			filedata = file.read()
 		filedata = filedata.replace('//scale', 'scale '+str(cscale))
 
 		# Replace the target string
-		filedata = filedata.replace('a1', 'a1_'+ str("%03d" % frames))
-		
-
+		filedata = filedata.replace('char_', 's_'+ str("%03d" % lf))
+	
 		# Write the file out again
-		with open('testscale'+ str("%03d" % frames)+ '.pov', 'w') as file:			
+		with open('s'+ str("%03d" % lf)+ '.pov', 'w') as file:			
 			file.write(filedata)
 
 		os.system(teste)
 		os.system(teste1)
 	   
-		query = input('\nIs this result ok? < use \'y\' or \'n\'>\n')
+		query = raw_input('\nIs this result ok? < use y or n>\n')
         	F = query[0].lower()
 
 	if F == 'n':
-		print ('redo')	
+		print ('\nredo\n')	
 	
 	if F == 'y':
-		with open('c%%%.pov', 'r') as file :
+		with open('a%%%.pov', 'r') as file :
 			filedata = file.read()
 
 # Replace the target string
 		filedata = filedata.replace('//scale', 'scale '+str(cscale))
 
 # Write the file out again
-		with open('c%%%.pov', 'w') as file:
+		with open('a%%%.pov', 'w') as file:
 			file.write(filedata)
 		print('\nChanges made.\n')
 		break
 ##################################################### declare mesh name for each timestep-------------------------------------
 
-iso = 1
+
 for m in range(ff, lf+1):
 
-	fin = open( 'a'+ str(iso)+'_'+ str("%03d" % m) + '.pov', "r" )
+	fin = open( 'a_'+ str("%03d" % m) + '.pov', "r" )
 	data_list = fin.readlines()
 	fin.close()
 
-	# remove list items from index 0 to 55 (inclusive)
+# remove list items from index 0 to 55 (inclusive)
 	del data_list[0:55]
 
-	# write the changed data (list) to a file
-	fout = open( 'a'+ str(iso)+'_'+ str("%03d" % m) + '.pov', "w")
+# write the changed data (list) to a file
+	fout = open( 'a_'+ str("%03d" % m) + '.pov', "w")
 	fout.writelines(data_list)
 	fout.close() 
 
-	for line in fileinput.input('a'+ str(iso)+'_'+ str("%03d" % m) + '.pov', inplace=True):
-		    if line.strip().startswith('mesh2'):
-			line = '#declare a'+ str(iso)+'_'+ str("%03d" % m)+' = mesh2 {\n'
-		    sys.stdout.write(line)
-		
+	for line in fileinput.input('a_'+ str("%03d" % m) + '.pov', inplace=True):
+	    	if line.strip().startswith('mesh2'):
+	        	line = '#declare a_'+ str("%03d" % m)+' = mesh2 {\n'
+	    	sys.stdout.write(line)
+	
 	counter = 0
-	for line in fileinput.input('a'+ str(iso)+'_'+ str("%03d" % m) + '.pov', inplace=True):
+	for line in fileinput.input('a_'+ str("%03d" % m) + '.pov', inplace=True):
 	    if not counter:
-		if line.startswith('	texture'):
-		    counter = 7
-		else:
-		    print line,
+	        if line.startswith('	texture'):
+	            counter = 7
+	        else:
+	            print line,
 	    else:
-		counter -= 1
-
-
-
-
-
-# change mesh name in the pov file to the correspondent timestep---------------------------------------------
-for f in range(ff, lf+1):
-# Read in the file
-	with open('c%%%.pov', 'r') as file :
-  		filedata = file.read()
-
-# Replace the target string
-	filedata = filedata.replace('a1', 'a1_'+ str("%03d" % f))
-		
-# Write the file out again
-	with open('c'+ str("%03d" % f)+ '.pov', 'w') as file:
-  		file.write(filedata)
+		        counter -= 1
 
 
 # render pov files --------------------------------------------------------------------------------------
 
 for p in range(ff, lf+1): 
-	pov = 'povray c'+ str("%03d" % p)+ '.pov -w3840 -h2160'
+	pov = 'povray p'+ str("%03d" % p)+ '.pov -w3840 -h2160'
 	os.system(pov)
-
-
-################ return default pov file to scale 1
-while True:
-	if F == 'y':
-		with open('c%%%.pov', 'r') as file :
-  			filedata = file.read()
-
-# Replace the target string
-		filedata = filedata.replace('scale '+str(cscale), '//scale')
-
-# Write the file out again
-		with open('c%%%.pov', 'w') as file:
-  			file.write(filedata)	
-		break	
-	else:
-		break
-
 
 #copy last image to fix error of video not showing all frames --------------------------------------------
 #import shutil 
@@ -455,8 +438,32 @@ while True:
 
 
 # produce video--------------------------------------------------------------------------------------------
-
-video = 'ffmpeg -framerate 15 -i c%03d.png -vf format=yuv420p video.mp4'
+frate = 15
+video = 'ffmpeg -framerate '+str(frate)+' -i p%03d.png -vf format=yuv420p video_15fps.mp4'
 os.system(video)
 
-print('\nRay tracing render process complete.\n') 
+cframe = raw_input('\nDo you want to change the framerate in your final video? < use y or n>\n')
+G = cframe[0].lower()
+
+while True:
+
+	if G == 'n':
+		break 
+
+	if G == 'y':
+        	frate = input('\nInput the new framerate: <type a number>\n')
+		nvideo = 'ffmpeg -framerate '+str(frate)+' -i p%03d.png -vf format=yuv420p video_'+str(frate)+'fps.mp4'
+		os.system(nvideo)
+		query = raw_input('\nIs the result ok? < use y or n>\n')
+        	Gl = query[0].lower()
+
+	if Gl == 'n':
+		print ('\nredo\n')	
+	
+	if Gl == 'y':
+		break 	
+
+print('\nRay tracing render process complete.\n')
+
+
+
