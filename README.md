@@ -1,7 +1,23 @@
 # Paraview-to-POVRay-Water-Render
-A python script to export STL objects from Paraview and render a scene with water appearence via POVRay
+A python script to export isosurfaces from ParaView and render a scene with natural water appeareancescene via POV-Ray
 
-1 - Clone Paraview-to-POVRay-Water-Render archives in the stl2pov directory
+Required softwares:
+ParaView (https://www.paraview.org/download/)
+POV-Ray (https://www.povray.org/download/)
+FFmpeg (https://www.ffmpeg.org/download.html)
 
-2 - Run water_render_ISOVALORES.py
+GETTING STARTED:
+
+- Clone Paraview-to-POVRay-Water-Render archives to a directory of your choice
+
+- Open a shell prompt, find the cloned directory and run: python water_render.py
+
+OPERATING THE SOFTWARE:
+
+The software will ask you to input a few start parameters:
+
+1 - Input the path to the XDMF file in your simulation database
+2 - Inputa a name to create a new directory whe your visualization files will be saved
+3 - Input the total frames number of your simulation (paraview)
+
 
