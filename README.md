@@ -16,7 +16,7 @@ OPERATING THE SOFTWARE:
 
 The software will ask you to input a few start parameters:
 
-1 - Input the path to the XDMF file in your simulation database
+1 - Input the path to the XDMF file in your simulation database \n
 2 - Input a name to create a new directory whe your visualization files will be saved
 3 - Input the total frames number of your simulation (paraview)
 
