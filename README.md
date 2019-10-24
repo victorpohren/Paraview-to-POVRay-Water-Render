@@ -35,7 +35,7 @@ After setting the parameters the software will export the isosurfaces and synthe
 
 The software will ask if you want to escalete the objects in the scene. If you choose to do it, input a value to scale it and wait for the rendering process again. The software will redo this step until you are satisfied with the result and set the new scale value.
 
-The rendering process of all frames will commence and create a mp4 video with a pattern framerate (15fps) after it finishes. The software asks if you want to set a new framerate. If yes, input another value and check the result. 
+The rendering process of all frames will commence and show a mp4 video (in infinite loop) with a pattern framerate (15fps) after it finishes. The software asks if you want to set a new framerate. If yes, input another value and check the result. 
 
 The rendering process ends when you are satisfied with the output.
 
