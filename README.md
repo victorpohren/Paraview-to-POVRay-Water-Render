@@ -2,8 +2,11 @@
 A python script to export isosurfaces from ParaView and render a scene with natural water appeareancescene via POV-Ray
 
 Required softwares:
+
 ParaView (https://www.paraview.org/download/)
+
 POV-Ray (https://www.povray.org/download/)
+
 FFmpeg (https://www.ffmpeg.org/download.html)
 
 GETTING STARTED:
@@ -32,7 +35,7 @@ After setting the parameters the software will export the isosurfaces and synthe
 
 The software will ask if you want to escalete the objects in the scene. If you choose to do it, input a value to scale it and wait for the rendering process again. The software will redo this step until you are satisfied with the result and set the new scale value.
 
-The rendering process of all frames will commence and create a video with a pattern framerate (15fps) after it finishes. The software asks if you want to set a new framerate. If yes, input another value and check the result. 
+The rendering process of all frames will commence and create a mp4 video with a pattern framerate (15fps) after it finishes. The software asks if you want to set a new framerate. If yes, input another value and check the result. 
 
 The rendering process ends when you are satisfied with the output.
 
