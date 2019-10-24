@@ -10,16 +10,29 @@ GETTING STARTED:
 
 - Clone Paraview-to-POVRay-Water-Render archives to a directory of your choice
 
-- Open a shell prompt, find the cloned directory and run: python water_render.py
+- Open a shell prompt, seek the directory where you cloned it and run: python water_render.py
 
 OPERATING THE SOFTWARE:
 
-The software will ask you to input a few start parameters:
+The software will ask you to input a few parameters before it starts rendering:
 
-1 - Input the path to the XDMF file in your simulation database
+- Input the path to the XDMF file in your simulation database
 
-2 - Input a name to create a new directory whe your visualization files will be saved
+- Input a name to create a new directory whe your visualization files will be saved
 
-3 - Input the total frames number of your simulation (paraview)
+- Input the total frames number and time [seconds] of your simulation (this step requires open your XDMF file manually in ParaView and withdrawn the information from the toolbar by seting the last frame)
 
+- Select the range of frames you want to render inputing the first and last frames of it
+
+- Select the range of isovalours you want in your isosurface inputing how many of they and the first and last values of this
+
+RENDERING PROCESS:
+
+After setting the parameters the software will export the isosurfaces and synthesize a picture from the last frame.
+
+The software will ask if you want to escalete the objects in the scene. If you choose to do it, input a value to scale it and wait for the rendering process again. The software will redo this step until you are satisfied with the result and set the new scale value.
+
+The rendering process of all frames will commence and create a video with a pattern framerate (15fps) after it finishes. The software will aks if you want to set a new framerate. If yes, input another value and check the result. 
+
+The rendering process ends when you are satisfied with the output.
 
