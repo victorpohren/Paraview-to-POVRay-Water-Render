@@ -15,7 +15,7 @@ FFmpeg (https://www.ffmpeg.org/download.html)
 
 - Open a shell prompt, seek the directory where you cloned it and run: python water_render.py
 
-OPERATING THE SOFTWARE:
+## OPERATING THE SOFTWARE:
 
 The software will ask you to input a few parameters before it starts rendering:
 
