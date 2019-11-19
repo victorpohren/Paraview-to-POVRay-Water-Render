@@ -19,27 +19,27 @@ OPERATING THE SOFTWARE:
 
 The software will ask you to input a few parameters before it starts rendering:
 
-- Input the path to the XDMF file in your simulation database
+- Path to the XDMF file in your simulation database
 
-- Input a name to create a new directory where your visualization files will be saved
+- Name to create a new directory where your visualization files will be saved
 
-- Input the total frames number and time [seconds] of your simulation (this step requires open your XDMF file manually in ParaView and withdrawn the information from the toolbar by seting the last frame)
+- Total frames number and time [seconds] of your simulation (this step requires open your XDMF file manually in ParaView and withdrawn the information from the toolbar by seting the last frame)
 
-- Select the range of frames you want to render inputing the first and last values of it
+- Range of frames you want to render (input the first and last values of it)
 
-- Select the range of isovalours you want in your isosurface inputing how many of they and the first and last values of this
+- Range of isovalours you want in your isosurface (input how many of they as well as the first and last values of this)
 
 ## RENDERING PROCESS:
 
-After setting the parameters the software will export the isosurfaces and synthesize a picture from the last frame.
+1. After setting the parameters the software will export the isosurfaces and synthesize a picture from the last frame.
 
-The software will ask if you want to scalate the objects in the scene. If you choose to do it, input a value to scale it and wait for the rendering process again. The software will redo this step until you are satisfied with the result and set the new scale value.
+2. The software will ask if you want to scalate the objects in the scene. If you choose to do it, input a value to scale it and wait for the rendering process again. The software will redo this step until you are satisfied with the result and set the new scale value.
 
-After the scale test you can choose to edit camera position and flowbox to frame the flow geometry as you wish. It must be edited manually in the pattern pov file. The software will test rendering the last frame again and ask if you are satisfied.
+3. After the scale test you can choose to edit camera position and flowbox to frame the flow geometry as you wish. It must be edited manually in the pattern pov file. The software will test rendering the last frame again and ask if you are satisfied.
 
-Finally the rendering process of all frames will commence and show a mp4 video (in infinite loop) with a pattern framerate (15fps) after it finishes. The software asks if you want to set a new framerate. If yes, input another value and check the result. 
+4. Finally the rendering process of all frames will commence and show a mp4 video (in infinite loop) with a pattern framerate (15fps) after it finishes. The software asks if you want to set a new framerate. If yes, input another value and check the result. 
 
-The rendering process ends when you are satisfied with the output.
+5. The rendering process ends when you are satisfied with the output.
 
 
 
