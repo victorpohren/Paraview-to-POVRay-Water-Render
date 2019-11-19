@@ -9,7 +9,7 @@ POV-Ray (https://www.povray.org/download/)
 
 FFmpeg (https://www.ffmpeg.org/download.html)
 
-GETTING STARTED:
+## GETTING STARTED:
 
 - Clone Paraview-to-POVRay-Water-Render archives to a directory of your choice
 
@@ -29,19 +29,20 @@ The software will ask you to input a few parameters before it starts rendering:
 
 - Select the range of isovalours you want in your isosurface inputing how many of they and the first and last values of this
 
-RENDERING PROCESS:
+## RENDERING PROCESS:
 
 After setting the parameters the software will export the isosurfaces and synthesize a picture from the last frame.
 
-The software will ask if you want to scalete the objects in the scene. If you choose to do it, input a value to scale it and wait for the rendering process again. The software will redo this step until you are satisfied with the result and set the new scale value.
+The software will ask if you want to scalate the objects in the scene. If you choose to do it, input a value to scale it and wait for the rendering process again. The software will redo this step until you are satisfied with the result and set the new scale value.
 
-The rendering process of all frames will commence and show a mp4 video (in infinite loop) with a pattern framerate (15fps) after it finishes. The software asks if you want to set a new framerate. If yes, input another value and check the result. 
+After the scale test you can choose to edit camera position and flowbox to frame the flow geometry as you wish. It must be edited manually in the pattern pov file. The software will test rendering the last frame again and ask if you are satisfied.
+
+Finally the rendering process of all frames will commence and show a mp4 video (in infinite loop) with a pattern framerate (15fps) after it finishes. The software asks if you want to set a new framerate. If yes, input another value and check the result. 
 
 The rendering process ends when you are satisfied with the output.
 
-SCENE EDIT:
 
-Camera position and flowbox must be edited manually in the pattern pov file to frame the flow geometry.
+
 
 
 
