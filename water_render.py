@@ -10,7 +10,7 @@ from decimal import getcontext, Decimal
 getcontext().prec = 5
 
 simpath = raw_input ("Input the path of your snapshots.xdmf file:\n") 
-vispath = raw_input ("\nType a paste name to save the visualization files:\n")
+vispath = raw_input ("\nInput new directory name to save the visualization files:\n")
 
 visdir = 'mkdir '+ str(vispath)
 os.system(visdir)
@@ -390,6 +390,48 @@ while True:
 			file.write(filedata)
 		print('\nChanges made.\n')
 		break
+
+########################### edit flowbox and camera-------------------------------------------------------
+
+# scale options
+query = raw_input('\nDo you want to edit camera position and/or flowbox objects geometry? < use y or n>\n')
+ED = query[0].lower()
+         
+while True:
+	if ED == 'n':        	
+		print('\nNo changes.\n')
+		break 
+
+	if ED == 'y':
+		print ('\nMake modifications manually to the a%%%.pov file in this visualization directory')
+		mods = raw_input('Type anything after you save the modifications to test it:\n')
+	
+		# Read in the file
+		with open('a%%%.pov', 'r') as file :
+		  	filedata = file.read()
+
+		# Replace the target string
+		filedata = filedata.replace('char_', 's_'+ str("%03d" % lf))
+			
+		# Write the file out again
+		with open('s'+ str("%03d" % lf)+ '.pov', 'w') as file:
+		  	file.write(filedata)
+
+
+		os.system(teste)
+		os.system(teste1)
+	   
+		query = raw_input('\nIs this result ok? < use y or n>\n')
+        	E = query[0].lower()
+
+	if E == 'n':
+		print ('\nredo\n')	
+	
+	if E == 'y':
+		print ('\nrendering all time steps...\n')
+		break
+
+
 ##################################################### declare mesh name for each timestep-------------------------------------
 
 
@@ -423,12 +465,22 @@ for m in range(ff, lf+1):
 		        counter -= 1
 
 
-# render pov files --------------------------------------------------------------------------------------
+# change mesh name in the pov file to the correspondent timestep---------------------------------------------
+for f in range(ff, lf+1):
+# Read in the file
+	with open('a%%%.pov', 'r') as file :
+	  	filedata = file.read()
+
+# Replace the target string
+	filedata = filedata.replace('char_', 'a_'+ str("%03d" % f))
+		
+# Write the file out again
+	with open('p'+ str("%03d" % f)+ '.pov', 'w') as file:
+	  		file.write(filedata)
 
 for p in range(ff, lf+1): 
 	pov = 'povray p'+ str("%03d" % p)+ '.pov -w3840 -h2160'
 	os.system(pov)
-
 #copy last image to fix error of video not showing all frames --------------------------------------------
 #import shutil 
 #for c in range(tstp+1, tstp+11):
@@ -454,6 +506,8 @@ while True:
         	frate = input('\nInput the new framerate: <type a number>\n')
 		nvideo = 'ffmpeg -framerate '+str(frate)+' -i p%03d.png -vf format=yuv420p video_'+str(frate)+'fps.mp4'
 		os.system(nvideo)
+		pvideo = 'ffplay -loop 0 video_'+str(frate)+'fps.mp4'
+		os.system(pvideo)
 		query = raw_input('\nIs the result ok? < use y or n>\n')
         	Gl = query[0].lower()
 
@@ -464,6 +518,3 @@ while True:
 		break 	
 
 print('\nRay tracing render process complete.\n')
-
-
-
