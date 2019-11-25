@@ -171,5 +171,36 @@ box{ <-200/2,0,2.0/2>,<0,2.5/2,400/2>
                 finish { ambient 0.0 diffuse 0.0
                          reflection 0.0 }  
 }
+
+}
+ prism {
+   bezier_spline
+   0, 2.2, 16,
+	<0,-0.1>, <10,-0.1>, <40,-0.1>, <50,-0.1>  
+	<50,-0.1>, <50,0.-0.08>, <50,-0.02>, <50,0.0>  
+	<50,0.0>, <40,0.0>, <10,0.0>, <0,0.0>
+	<0,0.0>, <0,-0.02>, <0,-0.08>, <0,-0.1>
+
+texture { pigment{color Green transmit .9 }
+   finish { ambient 0  diffuse 0.1 reflection 0 conserve_energy phong 0.8 }
+}
+   interior {ior 1.5} 
+}
+
+
+ prism {
+   bezier_spline
+   0, 2.2, 16,
+	<0,-0.1>, <10,-0.1>, <40,-0.1>, <50,-0.1>  
+	<50,-0.1>, <50,0.-0.08>, <50,-0.02>, <50,0.0>  
+	<50,0.0>, <40,0.0>, <10,0.0>, <0,0.0>
+	<0,0.0>, <0,-0.02>, <0,-0.08>, <0,-0.1>
+translate <0, 0, 1.1>
+texture { pigment{color Green transmit .9 }
+   finish { ambient 0  diffuse 0.1 reflection 0 conserve_energy phong 0.8 }
+}
+   interior {ior 1.5} 
+}
+
 //-----------------------------------------------------------------
 //-----------------------------------------------------------------
