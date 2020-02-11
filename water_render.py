@@ -3,13 +3,35 @@ import os
 import sys
 import fileinput
 
-from decimal import getcontext, Decimal
-getcontext().prec = 5
-
-from decimal import getcontext, Decimal
-getcontext().prec = 5
-
+#input data source-------------------------------------------------------------------
 simpath = raw_input ("Input the path of your snapshots.xdmf file:\n") 
+
+#extract timestep from snapshots-----------------------------------------------------
+inFile = open(simpath)
+outFile = open("timestep.py", "w")
+
+data = inFile.readlines()
+
+outFile.write("".join(data[data.index('             <!--Start, Stride, Count-->\n')+1:data.index('             </DataItem>\n')]))
+inFile.close()
+outFile.close()
+
+with open('timestep.py', 'r') as file :
+	  filedata = file.read()
+
+# Replace the target string
+filedata = filedata.replace('             0.0', 'dt =')
+		
+# Write the file out again
+with open('timestep.py', 'w') as file:
+	  	file.write(filedata)
+
+from timestep import dt
+tstp = dt
+print('timestep = '+str(tstp)+'s')
+
+
+#create new render directory------------------------------------------------------------
 vispath = raw_input ("\nInput new directory name to save the visualization files:\n")
 
 visdir = 'mkdir '+ str(vispath)
@@ -23,10 +45,7 @@ os.chdir(vispath)
 cwd = os.getcwd()
 print cwd
 
-frames = input("\nType the total number of frames in your simulation:\n")
-t = input("\nType the total time of your simulation: [seconds]\n")
-tstp = Decimal(t)/Decimal(frames)
-print ('timestep: '+str(tstp)+'s')
+#input isosurfaces parameters-----------------------------------------------------------
 ff = input("\nType the frame number you want to start from:\n")
 lf = input("\nType until wich you want to render:\n")
 ni = input("\nType how many isovalours you want to use:\n")
@@ -34,6 +53,9 @@ fi = input("\nType the first isovalour:\n")
 li = input("\nType the last isovalour:\n")
 print('\nRendering from frame '+str(ff)+' to ' + str(lf)+'\n\n\n\n\n\n') 
 
+
+#PARAVIEW BLOCK-------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------
 
 #### import the simple module from the paraview
 from paraview.simple import *
@@ -81,10 +103,8 @@ renderView1.ResetCamera()
 # update the view to ensure updated data information
 renderView1.Update()
 
-
-x = Decimal(ff)*Decimal(tstp)
-
-
+#move isosurfaces in time-----------------------------------------------------
+x = ff*tstp
 for f in range (ff,lf+1):
 	# create a new 'Force Time'
 	forceTime1 = ForceTime(Input=a1_snapshotsxdmf)
@@ -171,7 +191,7 @@ for f in range (ff,lf+1):
 	Delete(forceTime1)
 	del forceTime1
 
-	x = Decimal(x)+Decimal(tstp)
+	x = x+tstp
 
 	#### saving camera placements for all active views
 
