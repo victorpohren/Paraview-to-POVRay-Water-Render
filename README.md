@@ -19,11 +19,9 @@ FFmpeg (https://www.ffmpeg.org/download.html)
 
 The software will ask you to input a few parameters before it starts rendering:
 
-- Path to the XDMF file in your simulation database
+- Path to the snapshots file in your simulation database
 
 - Name to create a new directory where your visualization files will be saved
-
-- Total frames number and time [seconds] of your simulation (this step requires open your XDMF file manually in ParaView and withdrawn the information from the toolbar by seting the last frame)
 
 - Range of frames you want to render (input the first and last values of it)
 
