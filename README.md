@@ -1,7 +1,7 @@
 # Paraview-to-POVRay-Water-Render
 A python script to export isosurfaces from ParaView and render a scene with natural water appeareance by using Ray Tracing technique.
 
-![Image of Yaktocat](https://github.com/victorpohren/Paraview-to-POVRay-Water-Render/blob/master/victor_bacia2.png)
+![ray tracing comparision](https://github.com/victorpohren/Paraview-to-POVRay-Water-Render/blob/master/victor_bacia1.png)
 
 Required softwares:
 
